@@ -1,0 +1,126 @@
+Executing (default): SELECT 1+1 AS result
+Executing (default): SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'migrations'
+Executing (default): CREATE TABLE IF NOT EXISTS "migrations" ("name" VARCHAR(255) NOT NULL UNIQUE , PRIMARY KEY ("name"));
+Executing (default): SELECT i.relname AS name, ix.indisprimary AS primary, ix.indisunique AS unique, ix.indkey AS indkey, array_agg(a.attnum) as column_indexes, array_agg(a.attname) AS column_names, pg_get_indexdef(ix.indexrelid) AS definition FROM pg_class t, pg_class i, pg_index ix, pg_attribute a WHERE t.oid = ix.indrelid AND i.oid = ix.indexrelid AND a.attrelid = t.oid AND t.relkind = 'r' and t.relname = 'migrations' GROUP BY i.relname, ix.indexrelid, ix.indisprimary, ix.indisunique, ix.indkey ORDER BY i.relname;
+Executing (default): SELECT "name" FROM "migrations" AS "SequelizeMeta" ORDER BY "SequelizeMeta"."name" ASC;
+{
+  event: 'migrating',
+  name: '20230717_00_initialize_blogs_and_users.js'
+}
+Executing (default): CREATE TABLE IF NOT EXISTS "blogs" ("id"  SERIAL , "author" TEXT, "uri" TEXT NOT NULL, "title" TEXT NOT NULL, "likes" INTEGER DEFAULT 0, "created_at" TIMESTAMP WITH TIME ZONE, "updated_at" TIMESTAMP WITH TIME ZONE, PRIMARY KEY ("id"));
+Executing (default): CREATE TABLE IF NOT EXISTS "users" ("id"  SERIAL , "username" VARCHAR(255) NOT NULL UNIQUE, "name" VARCHAR(255) NOT NULL, "created_at" TIMESTAMP WITH TIME ZONE, "updated_at" TIMESTAMP WITH TIME ZONE, PRIMARY KEY ("id"));
+Executing (default): ALTER TABLE "public"."blogs" ADD COLUMN "user_id" INTEGER NOT NULL REFERENCES "users" ("id");
+Executing (default): SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'migrations'
+Executing (default): SELECT i.relname AS name, ix.indisprimary AS primary, ix.indisunique AS unique, ix.indkey AS indkey, array_agg(a.attnum) as column_indexes, array_agg(a.attname) AS column_names, pg_get_indexdef(ix.indexrelid) AS definition FROM pg_class t, pg_class i, pg_index ix, pg_attribute a WHERE t.oid = ix.indrelid AND i.oid = ix.indexrelid AND a.attrelid = t.oid AND t.relkind = 'r' and t.relname = 'migrations' GROUP BY i.relname, ix.indexrelid, ix.indisprimary, ix.indisunique, ix.indkey ORDER BY i.relname;
+Executing (default): INSERT INTO "migrations" ("name") VALUES ($1) RETURNING "name";
+{
+  event: 'migrated',
+  name: '20230717_00_initialize_blogs_and_users.js',
+  durationSeconds: 0.31
+}
+{ event: 'migrating', name: '20230718_01_add_year.js' }
+Executing (default): ALTER TABLE "public"."blogs" ADD COLUMN "year" INTEGER NOT NULL DEFAULT 2000;
+Executing (default): SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'migrations'
+Executing (default): SELECT i.relname AS name, ix.indisprimary AS primary, ix.indisunique AS unique, ix.indkey AS indkey, array_agg(a.attnum) as column_indexes, array_agg(a.attname) AS column_names, pg_get_indexdef(ix.indexrelid) AS definition FROM pg_class t, pg_class i, pg_index ix, pg_attribute a WHERE t.oid = ix.indrelid AND i.oid = ix.indexrelid AND a.attrelid = t.oid AND t.relkind = 'r' and t.relname = 'migrations' GROUP BY i.relname, ix.indexrelid, ix.indisprimary, ix.indisunique, ix.indkey ORDER BY i.relname;
+Executing (default): INSERT INTO "migrations" ("name") VALUES ($1) RETURNING "name";
+{
+  event: 'migrated',
+  name: '20230718_01_add_year.js',
+  durationSeconds: 0.026
+}
+{ event: 'migrating', name: '20230718_02_add_reading_list.js' }
+Executing (default): CREATE TABLE IF NOT EXISTS "lists" ("id"  SERIAL , "user_id" INTEGER NOT NULL REFERENCES "users" ("id"), "blog_id" INTEGER NOT NULL REFERENCES "blogs" ("id"), "read" BOOLEAN NOT NULL DEFAULT false, PRIMARY KEY ("id"));
+Executing (default): SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'migrations'
+Executing (default): SELECT i.relname AS name, ix.indisprimary AS primary, ix.indisunique AS unique, ix.indkey AS indkey, array_agg(a.attnum) as column_indexes, array_agg(a.attname) AS column_names, pg_get_indexdef(ix.indexrelid) AS definition FROM pg_class t, pg_class i, pg_index ix, pg_attribute a WHERE t.oid = ix.indrelid AND i.oid = ix.indexrelid AND a.attrelid = t.oid AND t.relkind = 'r' and t.relname = 'migrations' GROUP BY i.relname, ix.indexrelid, ix.indisprimary, ix.indisunique, ix.indkey ORDER BY i.relname;
+Executing (default): INSERT INTO "migrations" ("name") VALUES ($1) RETURNING "name";
+{
+  event: 'migrated',
+  name: '20230718_02_add_reading_list.js',
+  durationSeconds: 0.058
+}
+{ event: 'migrating', name: '20230725_03_add_session.js' }
+Executing (default): CREATE TABLE IF NOT EXISTS "sessions" ("id"  SERIAL , "user_id" INTEGER NOT NULL UNIQUE REFERENCES "users" ("id"), "token" VARCHAR(255) NOT NULL UNIQUE, "created_at" TIMESTAMP WITH TIME ZONE, "updated_at" TIMESTAMP WITH TIME ZONE, PRIMARY KEY ("id"));
+Executing (default): SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'migrations'
+Executing (default): SELECT i.relname AS name, ix.indisprimary AS primary, ix.indisunique AS unique, ix.indkey AS indkey, array_agg(a.attnum) as column_indexes, array_agg(a.attname) AS column_names, pg_get_indexdef(ix.indexrelid) AS definition FROM pg_class t, pg_class i, pg_index ix, pg_attribute a WHERE t.oid = ix.indrelid AND i.oid = ix.indexrelid AND a.attrelid = t.oid AND t.relkind = 'r' and t.relname = 'migrations' GROUP BY i.relname, ix.indexrelid, ix.indisprimary, ix.indisunique, ix.indkey ORDER BY i.relname;
+Executing (default): INSERT INTO "migrations" ("name") VALUES ($1) RETURNING "name";
+{
+  event: 'migrated',
+  name: '20230725_03_add_session.js',
+  durationSeconds: 0.099
+}
+{ event: 'migrating', name: '20230725_04_add_disabled_users.js' }
+Executing (default): ALTER TABLE "public"."users" ADD COLUMN "disabled" BOOLEAN NOT NULL DEFAULT false;
+Executing (default): SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'migrations'
+Executing (default): SELECT i.relname AS name, ix.indisprimary AS primary, ix.indisunique AS unique, ix.indkey AS indkey, array_agg(a.attnum) as column_indexes, array_agg(a.attname) AS column_names, pg_get_indexdef(ix.indexrelid) AS definition FROM pg_class t, pg_class i, pg_index ix, pg_attribute a WHERE t.oid = ix.indrelid AND i.oid = ix.indexrelid AND a.attrelid = t.oid AND t.relkind = 'r' and t.relname = 'migrations' GROUP BY i.relname, ix.indexrelid, ix.indisprimary, ix.indisunique, ix.indkey ORDER BY i.relname;
+Executing (default): INSERT INTO "migrations" ("name") VALUES ($1) RETURNING "name";
+{
+  event: 'migrated',
+  name: '20230725_04_add_disabled_users.js',
+  durationSeconds: 0.032
+}
+{ event: 'migrating', name: '20230726_05_add_users.js' }
+Executing (default): INSERT INTO "users" ("username","name") VALUES ('test@test.com','test');
+Executing (default): SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'migrations'
+Executing (default): SELECT i.relname AS name, ix.indisprimary AS primary, ix.indisunique AS unique, ix.indkey AS indkey, array_agg(a.attnum) as column_indexes, array_agg(a.attname) AS column_names, pg_get_indexdef(ix.indexrelid) AS definition FROM pg_class t, pg_class i, pg_index ix, pg_attribute a WHERE t.oid = ix.indrelid AND i.oid = ix.indexrelid AND a.attrelid = t.oid AND t.relkind = 'r' and t.relname = 'migrations' GROUP BY i.relname, ix.indexrelid, ix.indisprimary, ix.indisunique, ix.indkey ORDER BY i.relname;
+Executing (default): INSERT INTO "migrations" ("name") VALUES ($1) RETURNING "name";
+{
+  event: 'migrated',
+  name: '20230726_05_add_users.js',
+  durationSeconds: 0.029
+}
+{ event: 'migrating', name: '20230726_06_add_blogs.js' }
+Executing (default): INSERT INTO "blogs" ("author","uri","title","user_id","year") VALUES ('Dan Abramov','https://overreacted.io/writing-resilient-components/','Writing Resilient Components',1,2000),('Martin Fowler','https://martinfowler.com/articles/is-quality-worth-cost.html','Is High Quality Software Worth the Cost?',1,2000),('Robert C. Martin','https://blog.cleancoder.com/uncle-bob/2018/04/13/FPvsOO.html','FP vs. OO List Processing',1,2000);
+Executing (default): SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'migrations'
+Executing (default): SELECT i.relname AS name, ix.indisprimary AS primary, ix.indisunique AS unique, ix.indkey AS indkey, array_agg(a.attnum) as column_indexes, array_agg(a.attname) AS column_names, pg_get_indexdef(ix.indexrelid) AS definition FROM pg_class t, pg_class i, pg_index ix, pg_attribute a WHERE t.oid = ix.indrelid AND i.oid = ix.indexrelid AND a.attrelid = t.oid AND t.relkind = 'r' and t.relname = 'migrations' GROUP BY i.relname, ix.indexrelid, ix.indisprimary, ix.indisunique, ix.indkey ORDER BY i.relname;
+Executing (default): INSERT INTO "migrations" ("name") VALUES ($1) RETURNING "name";
+{
+  event: 'migrated',
+  name: '20230726_06_add_blogs.js',
+  durationSeconds: 0.037
+}
+Migrations up to date {
+  files: [
+    '20230717_00_initialize_blogs_and_users.js',
+    '20230718_01_add_year.js',
+    '20230718_02_add_reading_list.js',
+    '20230725_03_add_session.js',
+    '20230725_04_add_disabled_users.js',
+    '20230726_05_add_users.js',
+    '20230726_06_add_blogs.js'
+  ]
+}
+Database connected
+Server running on port 3001
+Executing (default): SELECT "user"."id", "user"."username", "user"."name", "user"."disabled", "user"."created_at" AS "createdAt", "user"."updated_at" AS "updatedAt", "blogs"."id" AS "blogs.id", "blogs"."author" AS "blogs.author", "blogs"."uri" AS "blogs.uri", "blogs"."title" AS "blogs.title", "blogs"."likes" AS "blogs.likes", "blogs"."year" AS "blogs.year", "blogs"."user_id" AS "blogs.userId" FROM "users" AS "user" LEFT OUTER JOIN "blogs" AS "blogs" ON "user"."id" = "blogs"."user_id";
+Executing (default): SELECT "user"."id", "user"."username", "user"."name", "user"."disabled", "user"."created_at" AS "createdAt", "user"."updated_at" AS "updatedAt", "blogs"."id" AS "blogs.id", "blogs"."author" AS "blogs.author", "blogs"."uri" AS "blogs.uri", "blogs"."title" AS "blogs.title", "blogs"."likes" AS "blogs.likes", "blogs"."year" AS "blogs.year", "blogs"."user_id" AS "blogs.userId" FROM "users" AS "user" LEFT OUTER JOIN "blogs" AS "blogs" ON "user"."id" = "blogs"."user_id";
+Executing (default): INSERT INTO "users" ("id","username","name","disabled","created_at","updated_at") VALUES (DEFAULT,$1,$2,$3,$4,$5) RETURNING "id","username","name","disabled","created_at","updated_at";
+Executing (default): SELECT "user"."id", "user"."username", "user"."name", "user"."disabled", "user"."created_at" AS "createdAt", "user"."updated_at" AS "updatedAt", "blogs"."id" AS "blogs.id", "blogs"."author" AS "blogs.author", "blogs"."uri" AS "blogs.uri", "blogs"."title" AS "blogs.title", "blogs"."likes" AS "blogs.likes", "blogs"."year" AS "blogs.year", "blogs"."user_id" AS "blogs.userId" FROM "users" AS "user" LEFT OUTER JOIN "blogs" AS "blogs" ON "user"."id" = "blogs"."user_id";
+Executing (default): SELECT "id", "username", "name", "disabled", "created_at" AS "createdAt", "updated_at" AS "updatedAt" FROM "users" AS "user" WHERE "user"."username" = 'tester';
+Executing (default): SELECT "user"."id", "user"."username", "user"."name", "user"."disabled", "user"."created_at" AS "createdAt", "user"."updated_at" AS "updatedAt", "blogs"."id" AS "blogs.id", "blogs"."author" AS "blogs.author", "blogs"."uri" AS "blogs.uri", "blogs"."title" AS "blogs.title", "blogs"."likes" AS "blogs.likes", "blogs"."year" AS "blogs.year", "blogs"."user_id" AS "blogs.userId" FROM "users" AS "user" LEFT OUTER JOIN "blogs" AS "blogs" ON "user"."id" = "blogs"."user_id";
+Executing (default): SELECT "id", "username", "name", "disabled", "created_at" AS "createdAt", "updated_at" AS "updatedAt" FROM "users" AS "user" WHERE "user"."username" = 'test@test.com';
+Executing (default): INSERT INTO "users" ("id","username","name","disabled","created_at","updated_at") VALUES (DEFAULT,$1,$2,$3,$4,$5) RETURNING "id","username","name","disabled","created_at","updated_at";
+Executing (default): SELECT "id", "username", "name", "disabled", "created_at" AS "createdAt", "updated_at" AS "updatedAt" FROM "users" AS "user" WHERE "user"."username" = 'test@test.com';
+Executing (default): DELETE FROM "sessions" WHERE "user_id" = 1
+Executing (default): INSERT INTO "sessions" ("id","user_id","token","created_at","updated_at") VALUES (DEFAULT,$1,$2,$3,$4) RETURNING "id","user_id","token","created_at","updated_at";
+Executing (default): SELECT "user"."id", "user"."username", "user"."name", "user"."disabled", "user"."created_at" AS "createdAt", "user"."updated_at" AS "updatedAt", "blogs"."id" AS "blogs.id", "blogs"."author" AS "blogs.author", "blogs"."uri" AS "blogs.uri", "blogs"."title" AS "blogs.title", "blogs"."likes" AS "blogs.likes", "blogs"."year" AS "blogs.year", "blogs"."user_id" AS "blogs.userId" FROM "users" AS "user" LEFT OUTER JOIN "blogs" AS "blogs" ON "user"."id" = "blogs"."user_id" WHERE "user"."username" = 'tester@tester.com';
+Executing (default): UPDATE "users" SET "name"=$1,"updated_at"=$2 WHERE "id" = $3
+Executing (default): SELECT "user"."id", "user"."username", "user"."name", "user"."disabled", "user"."created_at" AS "createdAt", "user"."updated_at" AS "updatedAt", "blogs"."id" AS "blogs.id", "blogs"."author" AS "blogs.author", "blogs"."uri" AS "blogs.uri", "blogs"."title" AS "blogs.title", "blogs"."likes" AS "blogs.likes", "blogs"."year" AS "blogs.year", "blogs"."user_id" AS "blogs.userId" FROM "users" AS "user" LEFT OUTER JOIN "blogs" AS "blogs" ON "user"."id" = "blogs"."user_id" WHERE "user"."username" = 'tester@tester.com';
+Executing (default): UPDATE "users" SET "name"=$1,"updated_at"=$2 WHERE "id" = $3
+Executing (default): SELECT "user"."id", "user"."username", "user"."name", "user"."disabled", "user"."created_at" AS "createdAt", "user"."updated_at" AS "updatedAt", "blogs"."id" AS "blogs.id", "blogs"."author" AS "blogs.author", "blogs"."uri" AS "blogs.uri", "blogs"."title" AS "blogs.title", "blogs"."likes" AS "blogs.likes", "blogs"."year" AS "blogs.year", "blogs"."user_id" AS "blogs.userId" FROM "users" AS "user" LEFT OUTER JOIN "blogs" AS "blogs" ON "user"."id" = "blogs"."user_id" WHERE "user"."username" = 'nouser';
+Executing (default): SELECT "id", "username", "name", "disabled", "created_at" AS "createdAt", "updated_at" AS "updatedAt" FROM "users" AS "user" WHERE "user"."username" = 'test@test.com';
+Executing (default): DELETE FROM "sessions" WHERE "user_id" = 1
+Executing (default): INSERT INTO "sessions" ("id","user_id","token","created_at","updated_at") VALUES (DEFAULT,$1,$2,$3,$4) RETURNING "id","user_id","token","created_at","updated_at";
+Executing (default): SELECT "id", "username", "name", "disabled", "created_at" AS "createdAt", "updated_at" AS "updatedAt" FROM "users" AS "user" WHERE "user"."id" = 1;
+Executing (default): SELECT "id", "user_id" AS "userId", "token", "created_at" AS "createdAt", "updated_at" AS "updatedAt" FROM "sessions" AS "session" WHERE "session"."user_id" = 1;
+Executing (default): INSERT INTO "blogs" ("id","author","uri","title","likes","year","user_id") VALUES (DEFAULT,$1,$2,$3,$4,$5,$6) RETURNING "id","author","uri","title","likes","year","user_id";
+Executing (default): SELECT "blog"."id", "blog"."author", "blog"."uri", "blog"."title", "blog"."likes", "blog"."year", "user"."id" AS "user.id", "user"."name" AS "user.name" FROM "blogs" AS "blog" LEFT OUTER JOIN "users" AS "user" ON "blog"."user_id" = "user"."id" ORDER BY "blog"."likes" DESC;
+Executing (default): SELECT "blog"."id", "blog"."author", "blog"."uri", "blog"."title", "blog"."likes", "blog"."year", "user"."id" AS "user.id", "user"."name" AS "user.name" FROM "blogs" AS "blog" LEFT OUTER JOIN "users" AS "user" ON "blog"."user_id" = "user"."id" ORDER BY "blog"."likes" DESC;
+Executing (default): SELECT "id", "username", "name", "disabled", "created_at" AS "createdAt", "updated_at" AS "updatedAt" FROM "users" AS "user" WHERE "user"."id" = 1;
+Executing (default): SELECT "id", "user_id" AS "userId", "token", "created_at" AS "createdAt", "updated_at" AS "updatedAt" FROM "sessions" AS "session" WHERE "session"."user_id" = 1;
+Executing (default): SELECT "id", "username", "name", "disabled", "created_at" AS "createdAt", "updated_at" AS "updatedAt" FROM "users" AS "user" WHERE "user"."id" = 1;
+Executing (default): SELECT "id", "user_id" AS "userId", "token", "created_at" AS "createdAt", "updated_at" AS "updatedAt" FROM "sessions" AS "session" WHERE "session"."user_id" = 1;
+Executing (default): SELECT "id", "author", "uri", "title", "likes", "year", "user_id" AS "userId" FROM "blogs" AS "blog" WHERE "blog"."id" = '4';
+Liking blog 4
+Executing (default): SELECT "id", "author", "uri", "title", "likes", "year", "user_id" AS "userId" FROM "blogs" AS "blog" WHERE "blog"."id" = '4';
+Executing (default): UPDATE "blogs" SET "likes"=$1 WHERE "id" = $2
+Executing (default): SELECT "id", "author", "uri", "title", "likes", "year", "user_id" AS "userId" FROM "blogs" AS "blog" WHERE "blog"."id" = '0';

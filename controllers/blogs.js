@@ -68,7 +68,11 @@ router.delete('/:id', userFinder, blogFinder, async (req, res) => {
         throw Error('Only author can delete!')
     }
     await req.blog.destroy()
-    const blogs = await Blog.findAll();
+    const blogs = await Blog.findAll({
+        order: [
+            ['likes', 'DESC'],
+        ]
+    });
     res.status(200).json(blogs);
 })
 

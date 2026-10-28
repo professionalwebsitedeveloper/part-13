@@ -51,7 +51,7 @@ describe('POST /blogs', () => {
                 title: 'Test title',
                 uri: ''
             });
-        expect(response.status).toBe(500)
+        expect(response.status).toBe(400)
     });
     it('should return 400 if title is missing', async () => {
         const response = await request(baseURL)
@@ -61,7 +61,7 @@ describe('POST /blogs', () => {
                 author: 'Tester',
                 uri: 'https://www.test.com'
             });
-        expect(response.status).toBe(500)
+        expect(response.status).toBe(400)
     });
     it('should set likes to 0', async () => {
         expect(blog.likes).toBe(0)

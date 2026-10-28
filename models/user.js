@@ -1,4 +1,5 @@
 const { Model, DataTypes } = require('sequelize')
+
 const { sequelize } = require('../util/db')
 
 class User extends Model {}
@@ -11,24 +12,24 @@ User.init({
   },
   username: {
     type: DataTypes.STRING,
+    unique: true,
+    allowNull: false,
     validate: {
       isEmail: true,
-    },
-    unique:true,
-    allowNull: false
+      notEmpty: true
+    }
   },
   name: {
     type: DataTypes.STRING,
-    allowNull: false
-  },
-  disabled: {
-    type: DataTypes.BOOLEAN,
     allowNull: false,
-    defaultValue: false,
+    validate: {
+      notEmpty: true
+    }
   },
 }, {
   sequelize,
   underscored: true,
+  timestamps: true,
   modelName: 'user'
 })
 

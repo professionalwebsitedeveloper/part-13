@@ -20,9 +20,6 @@ const findUser = async (req, res, next) => {
         if (!decodedToken.id || !validSession) {
             throw Error('Session not valid!')
         }
-        if(req.user.disabled){
-            throw Error('User disabled!')
-        }
         next()
     } catch (error) {
         next(error)

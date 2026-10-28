@@ -17,11 +17,6 @@ router.post('/', async (req, res, next) => {
         error: 'Invalid username or password!'
       })
     }
-    if ((user.disabled)) {
-      return res.status(401).json({
-        error: 'User disabled!'
-      })
-    }
 
     const userForToken = {
       username: user.username,

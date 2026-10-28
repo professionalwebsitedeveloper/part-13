@@ -7,32 +7,24 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-  try {
-    const { password, ...userData } = req.body
-    const user = await User.create(userData)
-    res.json(user)
-  } catch (error) {
-    return res.status(400).json({ error: error.message })
-  }
+  const { password, ...userData } = req.body
+  const user = await User.create(userData)
+  res.json(user)
 })
 
 router.put('/:username', async (req, res) => {
-  try {
-    const user = await User.findOne({
-      where: {
-        username: req.params.username,
-      }
-    })
-    if (!user) {
-      return res.status(400).json({ error: 'User not found!' })
+  const user = await User.findOne({
+    where: {
+      username: req.params.username,
     }
-    const updated = await user.update({
-      name: req.body.name
-    })
-    res.json(updated)
-  } catch (error) {
-    return res.status(400).json({ error: error.message })
+  })
+  if (!user) {
+    return res.status(400).json({ error: ['User not found!'] })
   }
+  const updated = await user.update({
+    name: req.body.name
+  })
+  res.json(updated)
 })
 
 router.get('/:id', async (req, res) => {

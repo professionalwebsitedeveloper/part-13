@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "cli": "node cli.js",
-    "test": "jest --verbose true"
+    "test": "jest --runInBand --verbose true"
   },
   "author": "tc849948",
   "license": "MIT",

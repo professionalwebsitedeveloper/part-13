@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const { Session } = require('../models')
-const userFinder = require('../utils/findUser')
+const userFinder = require('../util/findUser')
 
 router.delete('/', userFinder, async (req, res, next) => {
   try {

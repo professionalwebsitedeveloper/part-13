@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const { List } = require('../models')
-const userFinder = require('../utils/findUser')
+const userFinder = require('../util/findUser')
 
 router.post('/', userFinder, async (req, res, next) => {
     try {

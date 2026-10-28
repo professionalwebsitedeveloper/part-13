@@ -1,6 +1,6 @@
 const { User } = require('../models')
 const jwt = require('jsonwebtoken')
-const validateSession = require('../utils/validateSession');
+const validateSession = require('./validateSession');
 
 const getTokenFrom = req => {
     const authorization = req.get('authorization')

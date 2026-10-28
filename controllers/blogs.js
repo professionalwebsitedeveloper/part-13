@@ -1,8 +1,8 @@
 const router = require('express').Router()
 const { Blog, User } = require('../models')
 const { Op } = require("sequelize");
-const userFinder = require('../utils/findUser');
-const blogFinder = require('../utils/findBlog');
+const userFinder = require('../util/findUser');
+const blogFinder = require('../util/findBlog');
 
 const currentYear = new Date().getFullYear();
 
@@ -68,15 +68,11 @@ router.post('/', userFinder, async (req, res, next) => {
 
 router.put('/:id', blogFinder, async (req, res, next) => {
     try {
-        if (!req.blog) {
-            throw Error('Blog not found!')
-        }
         if (!req.body.likes) {
             throw Error('Amount of likes missing!')
         }
         console.log(`Liking blog ${req.params.id}`)
-        const blog = await Blog.findByPk(req.params.id);
-        const updated = await blog.update({
+        const updated = await req.blog.update({
             likes: req.body.likes
         })
         return res.json(updated);
@@ -90,17 +86,10 @@ router.delete('/:id', userFinder, blogFinder, async (req, res, next) => {
         if (!req.user) {
             throw Error('No user found!')
         }
-        if (!req.blog) {
-            throw Error('Blog not found!')
-        }
         if (!(req.blog.userId == req.user.id)) {
             throw Error('Only author can delete!')
         }
-        await Blog.destroy({
-            where: {
-                id: req.params.id
-            }
-        })
+        await req.blog.destroy()
         const blogs = await Blog.findAll();
         res.status(200).json(blogs);
     } catch (error) {

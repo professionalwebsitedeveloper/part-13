@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-const { connectToDatabase, sequelize } = require('./utils/db')
+const { connectToDatabase, sequelize } = require('./util/db')
 const { QueryTypes } = require('sequelize')
 
 const main = async () => {

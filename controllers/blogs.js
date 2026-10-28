@@ -68,7 +68,7 @@ router.post('/', userFinder, async (req, res, next) => {
 
 router.put('/:id', blogFinder, async (req, res, next) => {
     try {
-        if (!req.body.likes) {
+        if (req.body.likes === undefined || req.body.likes === null) {
             throw Error('Amount of likes missing!')
         }
         console.log(`Liking blog ${req.params.id}`)

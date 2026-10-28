@@ -34,6 +34,7 @@ app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/logout', logoutRouter)
 app.use('/api/readinglist', listRouter)
+app.use('/api/readinglists', listRouter)
 
 app.use(errorHandler)
 

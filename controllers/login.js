@@ -18,17 +18,18 @@ router.post('/', async (req, res, next) => {
       })
     }
 
+    if (user.disabled) {
+      return res.status(401).json({
+        error: 'account disabled, please contact admin'
+      })
+    }
+
     const userForToken = {
       username: user.username,
       id: user.id,
     }
     const token = jwt.sign(userForToken, process.env.SECRET || 'secret')
 
-    await Session.destroy({
-      where: {
-        userId: user.id
-      }
-    })
     await Session.create({
       userId: user.id,
       token: token,
@@ -49,6 +50,5 @@ router.post('/', async (req, res, next) => {
     })
   }
 })
-
 
 module.exports = router

@@ -9,7 +9,6 @@ module.exports = {
       },
       user_id: {
         type: DataTypes.INTEGER,
-        unique: true,
         allowNull: false,
         references: { model: 'users', key: 'id' },
       },

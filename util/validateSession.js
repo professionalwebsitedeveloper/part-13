@@ -3,10 +3,11 @@ const { Session } = require('../models')
 const validateSession = async ({id, token}) => {
     const session = await Session.findOne({
         where: {
-            userId: id
+            userId: id,
+            token: token
         }
     })
-    if (!session || !(session.token == token)) {
+    if (!session) {
         return false
     }
     return true

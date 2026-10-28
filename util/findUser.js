@@ -15,6 +15,12 @@ const findUser = async (req, res, next) => {
         const token = getTokenFrom(req)
         const decodedToken = jwt.verify(token, process.env.SECRET || 'secret')
         req.user = await User.findByPk(decodedToken.id)
+        if (!req.user) {
+            throw Error('No user found!')
+        }
+        if (req.user.disabled) {
+            throw Error('User disabled!')
+        }
         const id = req.user.id
         const validSession = await validateSession({id, token})
         if (!decodedToken.id || !validSession) {

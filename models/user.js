@@ -26,6 +26,10 @@ User.init({
       notEmpty: { msg: 'name must not be empty' }
     }
   },
+  disabled: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
 }, {
   sequelize,
   underscored: true,

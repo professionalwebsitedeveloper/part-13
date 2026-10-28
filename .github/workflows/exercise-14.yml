@@ -1,0 +1,45 @@
+name: 'Exercise: 14'
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: mysecretpassword
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+      - name: Create .env
+        run: |
+          echo "DATABASE_URL=postgres://postgres:mysecretpassword@localhost:5432/postgres" > .env
+          echo "PORT=3001" >> .env
+          echo "SECRET=secret" >> .env
+      - name: Start server
+        run: |
+          npm start > server.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -s http://localhost:3001/api/blogs > /dev/null; then echo "server up"; break; fi
+            sleep 1
+          done
+          cat server.log
+      - name: Run tests
+        run: npm test

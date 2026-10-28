@@ -9,9 +9,10 @@ const currentYear = new Date().getFullYear();
 router.get('/', async (req, res) => {
     const where = {}
     if (req.query.search) {
-        where.title = {
-            [Op.iLike]: `%${req.query.search}%`
-        }
+        where[Op.or] = [
+            { title: { [Op.iLike]: `%${req.query.search}%` } },
+            { author: { [Op.iLike]: `%${req.query.search}%` } }
+        ]
     }
     const blogs = await Blog.findAll({
         attributes: {

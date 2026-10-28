@@ -6,15 +6,15 @@ router.get('/', async (req, res, next) => {
     try {
         const authors = await Blog.findAll({
             attributes: [
-              'author',
-              [sequelize.fn('COUNT', sequelize.col('*')), 'articles'],
-              [sequelize.fn('SUM', sequelize.col('likes')), 'likes'],
+                'author',
+                [sequelize.fn('COUNT', sequelize.col('*')), 'blogs'],
+                [sequelize.fn('SUM', sequelize.col('likes')), 'likes'],
             ],
             group: 'author',
             order: [
-              ['likes', 'DESC'],
+                [sequelize.fn('SUM', sequelize.col('likes')), 'DESC'],
             ],
-          });
+        });
         res.json(authors)
     } catch (error) {
         console.log(error.message)

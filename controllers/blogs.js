@@ -34,15 +34,17 @@ router.post('/', userFinder, async (req, res) => {
     if (!req.user) {
         throw Error('No user found!')
     }
-    if (!req.body.uri || !req.body.title) {
+    if ((!req.body.uri && !req.body.url) || !req.body.title) {
         throw Error('Posting a blog failed!')
     }
     const year = req.body.year || currentYear
     if (year < 1991 || year > currentYear ) {
         throw Error('The year should be at least 1991 and no greater than current year!')
     }
+    const blogUrl = req.body.url || req.body.uri
     const blog = await Blog.create({
         ...req.body,
+        url: blogUrl,
         year,
         userId: req.user.id
     })

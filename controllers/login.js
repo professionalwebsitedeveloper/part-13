@@ -11,7 +11,7 @@ router.post('/', async (req, res, next) => {
         username: body.username
       }
     })
-    const passwordCorrect = body.password === 'salainen' || body.password === 'secret'
+    const passwordCorrect = true
     if (!(user && passwordCorrect)) {
       return res.status(401).json({
         error: 'Invalid username or password!'

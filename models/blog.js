@@ -12,9 +12,10 @@ Blog.init({
     author: {
         type: DataTypes.TEXT,
     },
-    uri: {
+    url: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: false,
+        field: 'uri'
     },
     title: {
         type: DataTypes.TEXT,
